@@ -8,6 +8,8 @@
 # global variables
 # mal_l = []
 # mal_r = []
+import copy
+
 nr_couples = 0
 
 
@@ -22,26 +24,28 @@ def initialization():
 
 
 def isFinal(current_state):
-    if current_state[2] == nr_couples & current_state[3] == 1:
-        return True
+    # print(current_state)
+    if current_state[2] == nr_couples:
+        if current_state[3] == 1:
+            return True
     return False
 
 
-def transition(current_state, index_p1, gender1, index_p2=0, gender2=0):
-    new_state = current_state
-    if current_state[3] == 0:
-        new_state[1][index_p1 - 1][gender1] = index_p1
-        new_state[0][index_p1 - 1][gender1] = 0
-        if index_p2 != 0:
-            new_state[1][index_p2 - 1][gender2] = index_p2
-            new_state[0][index_p2 - 1][gender2] = 0
+def transition(transition_state, index_p1, gender1, index_p2=-1, gender2=-1):
+    new_state = transition_state
+    if transition_state[3] == 0:
+        new_state[1][index_p1][gender1] = index_p1 + 1
+        new_state[0][index_p1][gender1] = 0
+        if index_p2 != -1:
+            new_state[1][index_p2][gender2] = index_p2 + 1
+            new_state[0][index_p2][gender2] = 0
 
     else:
-        new_state[0][index_p1 - 1][gender1] = index_p1
-        new_state[1][index_p1 - 1][gender1] = 0
-        if index_p2 != 0:
-            new_state[1][index_p2 - 1][gender2] = index_p2
-            new_state[0][index_p2 - 1][gender2] = 0
+        new_state[0][index_p1][gender1] = index_p1 + 1
+        new_state[1][index_p1][gender1] = 0
+        if index_p2 != -1:
+            new_state[0][index_p2][gender2] = index_p2 + 1
+            new_state[1][index_p2][gender2] = 0
     k = 0
     mal_mal = new_state[1]
     for i in mal_mal:
@@ -52,8 +56,10 @@ def transition(current_state, index_p1, gender1, index_p2=0, gender2=0):
     return new_state
 
 
-def isValid(current_state, index_p1, gender1, index_p2=0, gender2=0):
-    new_state = transition(current_state, index_p1, gender1, index_p2, gender2)
+def isValid(to_validate_state, index_p1, gender1, index_p2=-1, gender2=-1):
+    if index_p1 == -1:
+        return False
+    new_state = transition(to_validate_state, index_p1, gender1, index_p2, gender2)
     rightW = 0
     rightH = 0
 
@@ -69,27 +75,63 @@ def isValid(current_state, index_p1, gender1, index_p2=0, gender2=0):
         return False
     elif leftW < leftH & leftW != 0:
         return False
-    elif rightW < rightH & rightW != 0 :
+    elif rightW < rightH & rightW != 0:
+        return False
+    elif rightW + leftW != nr_couples:
+        return False
+    elif rightH + rightH != nr_couples:
         return False
     else:
         return True
 
 
+def bkt_strategy(current_state, current_state_list):
+    copy_state = copy.deepcopy(current_state)
+    copy_state_list = copy.deepcopy(current_state_list)
+    current_state_list = []
+    if isFinal(current_state):
+        return True
+    else:
+        #        if current_state[3] == 0: # daca barca se va duce de la stanga la dreapta
+        if current_state[3] == 0:
+            mal = current_state[0]
+        else:
+            mal = current_state[1]
+
+        for couple in mal:  # mergem prin fiecare cuplu
+            for i in range(0, 2):  # mergem prin fiecare membru al cuplului
+                if couple[i] != 0:  # daca exista pe acest mal
+                    # if i == 0: # daca este sot
+                    for couple2 in mal:  # mergem prin fiecare cuplu
+                        for j in range(0, 2):  # mergem prin fiecare membru al cuplului
+                            # if couple[i] == couple2[j] and i == j:
+                            #     if isValid(copy_state, couple[i] - 1, i) is True:
+                            #         new_state = transition(current_state, couple[i] - 1, i)
+                            #         print(new_state)
+                            #         if bkt_strategy(new_state) is False:
+                            #             continue
+                            #     else:
+                            #         return False
+                            # else:
+                            # if couple2[j] != 0:
+                            if isValid(copy_state, couple[i] - 1, i, couple2[j] - 1, j) is True:
+                                new_state = transition(current_state, couple[i] - 1, i, couple2[j] - 1, j)
+                                print(i + 1, j + 1)
+                                if [couple[i] - 1, i, couple2[j] - 1, j,new_state[3]] not in copy_state_list:
+                                    print(new_state)
+                                    copy_state_list.append([couple[i] - 1, i, couple2[j] - 1, j,new_state[3]])
+                                    current_state_list = copy_state_list
+                                    bkt_strategy(new_state, current_state_list)
+                                else:
+                                    continue
+        return False
+
+
 if __name__ == '__main__':
+    # sys.setrecursionlimit(10000)
     nr_couples = int(input("Number of couples:"))
     state = initialization()  # primeste [situatia de pe malul stang, situatia de pe malul drept, cupluri mal drept
     # pozitia barcii]
     print(state)
-
-    if isValid(state, 2, 0, 2, 1):
-        state = transition(state, 2, 0, 2, 1)
-        print(isValid(state, 2, 0, 2, 1))
-        print(state)
-    if isValid(state, 2, 0):
-        state = transition(state, 2, 0)
-        print(isValid(state, 2, 0))
-        print(state)
-    if isValid(state, 2, 0, 3, 0):
-        state = transition(state, 2, 0, 3, 0)
-        print(isValid(state, 2, 0, 3, 0))
-        print(state)
+    state_list = copy.deepcopy(state)
+    bkt_strategy(state, [])
