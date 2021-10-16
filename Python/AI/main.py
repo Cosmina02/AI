@@ -1,142 +1,146 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-# Press the green button in the gutter to run the script.
-# global variables
-# mal_l = []
-# mal_r = []
 import copy
 
-nr_couples = 0
+
+class State:
+    mal_drept = None  # array cu pozitia persoanelor w1,w2,...,h1,h2...(0->stang,1->drept)
+    barca = 0  # initial pe malul stang
+    drum = None  # array cu state-uri
+    adancime = 0 # costul drumului
+
+    def __init__(self, s=None, b=0):
+        if s is None:
+            s = []
+        self.mal_drept = s
+        self.barca = b
+        self.adancime = 0
+        self.drum = []
+
+    def f(self):
+        return self.adancime+h(self)
 
 
-def initialization():
-    # pentru verif la 3 cupluri
-    print(nr_couples)
-    mal_l = []
-    mal_r = []
-    if nr_couples > 0:
-        for i in range(1, nr_couples + 1):
-            mal_l.append([i, i])  # sotul va fi pe pozitia 0 din tuplu, iar sotia pe pozitia 1
-            mal_r.append([0, 0])
-        return [mal_l, mal_r, 0, 0]
+def h(current_state):
+    result = len(current_state.mal_drept)
+    for i in current_state.mal_drept:
+        result = result-i
+    return result
 
-
-def is_final(current_state):
-    # print("in is final",current_state)
-    if current_state[2] == nr_couples:
-        if current_state[3] == 1:
-            return True
+def is_valid(current_state):
+    for i in range(0, noCouples):
+        if current_state.mal_drept[i] != current_state.mal_drept[noCouples + i]:
+            for j in range(noCouples, noCouples * 2):
+                if current_state.mal_drept[j] == current_state.mal_drept[i]:
+                    return True
     return False
 
 
-def transition(transition_state, index_p1, gender1, index_p2=-1, gender2=-1):
-    new_state = transition_state
-    if transition_state[3] == 0:
-        new_state[1][index_p1][gender1] = index_p1 + 1
-        new_state[0][index_p1][gender1] = 0
-        if index_p2 != -1:
-            new_state[1][index_p2][gender2] = index_p2 + 1
-            new_state[0][index_p2][gender2] = 0
-
-    else:
-        new_state[0][index_p1][gender1] = index_p1 + 1
-        new_state[1][index_p1][gender1] = 0
-        if index_p2 != -1:
-            new_state[0][index_p2][gender2] = index_p2 + 1
-            new_state[1][index_p2][gender2] = 0
-    k = 0
-    mal_mal = new_state[1]
-    for i in mal_mal:
-        if i[0] == i[1] & i[0] != 0:
-            k = k + 1
-    new_state[2] = k
-    new_state[3] = (new_state[3] + 1) % 2
-    return new_state
+def move_person(a):
+    return abs(a - 1)
 
 
-def is_valid(to_validate_state, index_p1, gender1, index_p2=-1, gender2=-1):
-    if index_p1 == -1:
-        return False
-    new_state = transition(to_validate_state, index_p1, gender1, index_p2, gender2)
-    rightW = 0
-    rightH = 0
+def check_side(current_state):  # verifica ce oamenii sunt pe aceeasi parte cu barca
+    good_people = copy.deepcopy(current_state.mal_drept)
+    for i in range(0, len(current_state.mal_drept)):
+        if current_state.mal_drept[i] == current_state.barca:
+            good_people[i] = 1
+    return good_people
 
-    mal_r = new_state[1]
-    for i in mal_r:
-        if i[0] != 0:
-            rightH = rightH + 1
-        if i[1] != 0:
-            rightW = rightW + 1
-    leftW = nr_couples - rightW
-    leftH = nr_couples - rightH
-    if leftH < 0 | leftW < 0 | rightH < 0 | rightW < 0:
-        return False
-    elif leftW < leftH & leftW != 0:
-        return False
-    elif rightW < rightH & rightW != 0:
-        return False
-    elif rightW + leftW != nr_couples:
-        return False
-    elif rightH + leftH != nr_couples:
-        return False
-    else:
+
+def is_final(current_state):
+    result = 0
+    for i in current_state.mal_drept:
+        result += i
+    if result == noCouples * 2:
         return True
+    return False
 
 
-def bkt_strategy(current_state, current_state_list):
-    copy_state = copy.deepcopy(current_state)
-    copy_state_list = copy.deepcopy(current_state_list)
-    current_state_list = []
-    if is_final(current_state):
-        print("am gasit starea finala")
-        return True
-    else:
-        #        if current_state[3] == 0: # daca barca se va duce de la stanga la dreapta
-        if current_state[3] == 0:
-            mal = current_state[0]
-        else:
-            mal = current_state[1]
+def visited_state(current_state, searched):
+    for k in range(0, len(searched)):
+        if current_state.mal_drept == searched[k].mal_drept and current_state.barca == searched[k].barca:
+            return True
+    return False
 
-        for couple in mal:  # mergem prin fiecare cuplu
-            for i in range(0, 2):  # mergem prin fiecare membru al cuplului
-                if couple[i] != 0:  # daca exista pe acest mal
-                    # if i == 0: # daca este sot
-                    for couple2 in mal:  # mergem prin fiecare cuplu
-                        for j in range(0, 2):  # mergem prin fiecare membru al cuplului
-                            # if couple[i] == couple2[j] and i == j:
-                            #     if isValid(copy_state, couple[i] - 1, i) is True:
-                            #         new_state = transition(current_state, couple[i] - 1, i)
-                            #         print(new_state)
-                            #         if bkt_strategy(new_state) is False:
-                            #             continue
-                            #     else:
-                            #         return False
-                            # else:
-                            # if couple2[j] != 0:
-                            if is_valid(copy_state, couple[i] - 1, i, couple2[j] - 1, j) is True:
-                                print("persoana ",couple[i],"persoana ", couple2[j],"merg pe malul ", current_state[3]+1%2)
-                                new_state = transition(current_state, couple[i] - 1, i, couple2[j] - 1, j)
-                                print(i + 1, j + 1)
-                                if [couple[i] - 1, i, couple2[j] - 1, j, new_state[3]] not in copy_state_list:
-                                    print(new_state)
-                                    copy_state_list.append([couple[i] - 1, i, couple2[j] - 1, j, new_state[3]])
-                                    current_state_list = copy_state_list
-                                    if bkt_strategy(new_state, current_state_list) is True:
-                                        return True
-                                else:
-                                    continue
-        return False
+def possible_moves(capacity, current_state, movement, result, start):
+    for i in range(start, len(current_state.mal_drept)):
+        if check_side(current_state)[i] == 1:
+            movement.append(i)
+            if capacity > 1:
+                possible_moves(capacity-1, current_state, movement, result, i)
+            if capacity == 1:
+                 result.append(copy.deepcopy(movement))
+            movement.pop()
+    return result
+
+def check_states(state):
+    current_state = copy.deepcopy(state)
+    result = []
+    all_moves = possible_moves(2,state, [], result, 0)
+    for i in all_moves:
+        current_state = copy.deepcopy(state)
+        for j in i:
+            current_state.mal_drept[j] = move_person(state.mal_drept[j])
+        current_state.barca = move_person(state.barca)
+        if visited_state(current_state, searched):
+            True
+        elif is_valid(current_state):
+            searched.append(current_state)
+        elif True:
+            current_state.adancime = current_state.adancime+1
+            current_state.drum.append(state)
+            frontier.append(current_state)
+
+
+def bfs():
+    noStates = 0
+    while True:
+        noStates = noStates + 1
+        current = frontier.pop(0)
+
+        if is_final(current) is True:
+            return current
+
+        check_states(current)
+        searched.append(current)
+
+
+def a_star():
+    noStates=0
+    while True:
+        noStates = noStates + 1
+        frontier.sort(key=lambda state: state.f())
+
+        current = frontier.pop(0)
+
+        if is_final(current) is True:
+            return current
+
+        check_states(current)
+        searched.append(current)
 
 
 if __name__ == '__main__':
-    # sys.setrecursionlimit(10000)
-    nr_couples = int(input("Number of couples:"))
-    state = initialization()  # primeste [situatia de pe malul stang, situatia de pe malul drept, cupluri mal drept
-    # pozitia barcii]
-    print(state)
-    state_list = copy.deepcopy(state)
-    bkt_strategy(state, [])
+    noCouples = int(input("Enter the number of couples: "))
+
+    couple = [0, 0]
+    initial = State([], 0)
+    goal = State([], 0)
+    drum = []
+    frontier = []
+    searched = []
+
+
+
+    for i in range(0, noCouples):
+        initial.mal_drept.extend(couple)
+
+    frontier.append(initial)
+
+    goal = bfs()
+    # goal = a_star()
+
+    print("\nSuccess: ", goal.mal_drept, " reached")
+    for i in goal.drum :
+        drum.append(i.mal_drept)
+    print("Path: ", drum)
+
