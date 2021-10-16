@@ -14,6 +14,8 @@ nr_couples = 0
 
 
 def initialization():
+    # pentru verif la 3 cupluri
+    print(nr_couples)
     mal_l = []
     mal_r = []
     if nr_couples > 0:
@@ -23,8 +25,8 @@ def initialization():
         return [mal_l, mal_r, 0, 0]
 
 
-def isFinal(current_state):
-    # print(current_state)
+def is_final(current_state):
+    # print("in is final",current_state)
     if current_state[2] == nr_couples:
         if current_state[3] == 1:
             return True
@@ -56,7 +58,7 @@ def transition(transition_state, index_p1, gender1, index_p2=-1, gender2=-1):
     return new_state
 
 
-def isValid(to_validate_state, index_p1, gender1, index_p2=-1, gender2=-1):
+def is_valid(to_validate_state, index_p1, gender1, index_p2=-1, gender2=-1):
     if index_p1 == -1:
         return False
     new_state = transition(to_validate_state, index_p1, gender1, index_p2, gender2)
@@ -79,7 +81,7 @@ def isValid(to_validate_state, index_p1, gender1, index_p2=-1, gender2=-1):
         return False
     elif rightW + leftW != nr_couples:
         return False
-    elif rightH + rightH != nr_couples:
+    elif rightH + leftH != nr_couples:
         return False
     else:
         return True
@@ -89,7 +91,8 @@ def bkt_strategy(current_state, current_state_list):
     copy_state = copy.deepcopy(current_state)
     copy_state_list = copy.deepcopy(current_state_list)
     current_state_list = []
-    if isFinal(current_state):
+    if is_final(current_state):
+        print("am gasit starea finala")
         return True
     else:
         #        if current_state[3] == 0: # daca barca se va duce de la stanga la dreapta
@@ -114,14 +117,16 @@ def bkt_strategy(current_state, current_state_list):
                             #         return False
                             # else:
                             # if couple2[j] != 0:
-                            if isValid(copy_state, couple[i] - 1, i, couple2[j] - 1, j) is True:
+                            if is_valid(copy_state, couple[i] - 1, i, couple2[j] - 1, j) is True:
+                                print("persoana ",couple[i],"persoana ", couple2[j],"merg pe malul ", current_state[3]+1%2)
                                 new_state = transition(current_state, couple[i] - 1, i, couple2[j] - 1, j)
                                 print(i + 1, j + 1)
-                                if [couple[i] - 1, i, couple2[j] - 1, j,new_state[3]] not in copy_state_list:
+                                if [couple[i] - 1, i, couple2[j] - 1, j, new_state[3]] not in copy_state_list:
                                     print(new_state)
-                                    copy_state_list.append([couple[i] - 1, i, couple2[j] - 1, j,new_state[3]])
+                                    copy_state_list.append([couple[i] - 1, i, couple2[j] - 1, j, new_state[3]])
                                     current_state_list = copy_state_list
-                                    bkt_strategy(new_state, current_state_list)
+                                    if bkt_strategy(new_state, current_state_list) is True:
+                                        return True
                                 else:
                                     continue
         return False
