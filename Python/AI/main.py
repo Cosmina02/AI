@@ -135,9 +135,19 @@ if __name__ == '__main__':
         initial.mal_drept.extend(couple)
 
     frontier.append(initial)
+    print("\nsearch strategies:")
+    print("\t(1) Breadth-First-Search")
+    print("\t(2)Hill Climbing Algorithm")
+    print("\t(3) A*-Search-Algorithm")
+    selection = int(input("Select the search strategy you would like to use: "))
 
-    goal = bfs()
-    # goal = a_star()
+    if (selection == 1) :
+        goal = bfs()  # search with Breadth-First-Search
+    elif (selection == 2) :
+        # goal = hillclimbing()
+        print("oops looks like we don't have it right now")
+    elif (selection == 3) :
+        goal = a_star()  # search with A*-Search-Algorithm
 
     print("\nSuccess: ", goal.mal_drept, " reached")
     for i in goal.drum :
