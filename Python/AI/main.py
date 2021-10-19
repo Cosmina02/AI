@@ -61,6 +61,7 @@ def visited_state(current_state, searched):
             return True
     return False
 
+
 def possible_moves(capacity, current_state, movement, result, start):
     for i in range(start, len(current_state.mal_drept)):
         if check_side(current_state)[i] == 1:
@@ -72,10 +73,11 @@ def possible_moves(capacity, current_state, movement, result, start):
             movement.pop()
     return result
 
+
 def check_states(state):
     current_state = copy.deepcopy(state)
     result = []
-    all_moves = possible_moves(2,state, [], result, 0)
+    all_moves = possible_moves(2, state, [], result, 0)
     for i in all_moves:
         current_state = copy.deepcopy(state)
         for j in i:
@@ -91,6 +93,28 @@ def check_states(state):
             frontier.append(current_state)
 
 
+
+def check_hc_state(state):
+    current_state = copy.deepcopy(state)
+    result = []
+    all_moves = possible_moves(2, state, [], result, 0)
+    for i in all_moves:
+        current_state = copy.deepcopy(state)
+        for j in i:
+            current_state.mal_drept[j] = move_person(state.mal_drept[j])
+        current_state.barca = move_person(state.barca)
+        if visited_state(current_state, searched):
+            True
+        elif is_valid(current_state) and state.f() > current_state.f():
+            searched.append(current_state)
+        elif True:
+            # print(f'f(current_state)={current_state.f()} \n f(state)={state.f()}')
+            # if current_state.f() < state.f():
+            current_state.adancime = current_state.adancime+1
+            current_state.drum.append(state)
+            frontier.append(current_state)
+
+
 def bfs():
     noStates = 0
     while True:
@@ -101,6 +125,21 @@ def bfs():
             return current
 
         check_states(current)
+        searched.append(current)
+
+
+def hillclimbing():
+    noStates = 0
+    while True:
+        noStates = noStates + 1
+
+        # print(f'size of frontier {len(frontier)}')
+        current = frontier.pop(0)
+
+        if is_final(current) is True:
+            return current
+
+        check_hc_state(current)
         searched.append(current)
 
 
@@ -129,8 +168,6 @@ if __name__ == '__main__':
     frontier = []
     searched = []
 
-
-
     for i in range(0, noCouples):
         initial.mal_drept.extend(couple)
 
@@ -141,16 +178,15 @@ if __name__ == '__main__':
     print("\t(3) A*-Search-Algorithm")
     selection = int(input("Select the search strategy you would like to use: "))
 
-    if (selection == 1) :
+    if (selection == 1):
         goal = bfs()  # search with Breadth-First-Search
-    elif (selection == 2) :
-        # goal = hillclimbing()
-        print("oops looks like we don't have it right now")
-    elif (selection == 3) :
+    elif (selection == 2):
+        goal = hillclimbing()
+    elif (selection == 3):
         goal = a_star()  # search with A*-Search-Algorithm
 
     print("\nSuccess: ", goal.mal_drept, " reached")
-    for i in goal.drum :
+    for i in goal.drum:
         drum.append(i.mal_drept)
     print("Path: ", drum)
 
