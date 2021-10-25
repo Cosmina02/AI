@@ -1,16 +1,17 @@
 import random
+import copy
 
 region_list = ['WA', 'SA', 'NT']  # lista cu regiunile
 
 # lista cu culorile fiecarei regiuni
 # poz_i din lista de culori corespunde regiunii_i din lista de regiuni
-colors_list = [{'R', 'G', 'B'}, {'R', 'G'}, {'G'}]
+colors_list = [['R', 'G', 'B'], ['R', 'G'], ['G']]
 
 # o lista cu adiacenta intre regiuni
 region_adjacency = {
-    'WA': {'SA', 'NT'},
-    'SA': {'WA', 'NT'},
-    'NT': {'WA', 'SA'}
+    'WA': ['SA', 'NT'],
+    'SA': ['WA', 'NT'],
+    'NT': ['WA', 'SA']
 }
 
 
@@ -33,7 +34,11 @@ def is_empty(region):
 def forward_checking(r, c):
     i = 0
     while is_empty(r[i]) is False:
-        a = random.sample(c[r.index(r[i])], 1)  # ia random o culoare din lista de culori a regiunii i
+        c2 = copy.deepcopy(c)
+        # pentru 3.10
+        # a = random.choice(c[r.index(r[i])])  # ia random o culoare din lista de culori a regiunii i
+        # pentru 3.9
+        a = random.sample(c[r.index(r[i])],1)  # ia random o culoare din lista de culori a regiunii i
         a = ' '.join(a)  # transforma culoarea din lista in string(pentru a putea fi folosita mai departe)
         remove_color(r[i], a)
         empty_domain = False
@@ -44,6 +49,7 @@ def forward_checking(r, c):
             if is_empty(r[k]):
                 empty_domain = True
         if empty_domain:
+            c = copy.deepcopy(c2)  #asta ar trebui sa reseteze teoretic
             a = 1  # asta e random pus -> trebuie reset function(nu stiu inca cum)
         else:
             return a
