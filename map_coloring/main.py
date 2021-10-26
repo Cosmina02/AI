@@ -28,17 +28,13 @@ region_adjacency2 = {
     'V': ['SA', 'NSW', 'T']
 }
 
-
+# verifica daca 2 regiuni sunt vecine si returneaza true sau false
 def is_consistent(region1, region2, color1, region_adj, colors, regions):
     for region, neighbours in region_adj.items():
         if region == region1 and neighbours.__contains__(region2):
             return colors[regions.index(region2)].__contains__(color1)
 
-
-def remove_color(region, color, regions, colors):
-    colors[regions.index(region)].remove(color)
-
-
+# verifica daca o regiune nu mai are culori disponibile
 def is_empty(colors, regions, region):
     if len(colors[regions.index(region)]) > 0:
         return False
@@ -46,38 +42,40 @@ def is_empty(colors, regions, region):
 
 
 def forward_checking(r, c, r_index, region_adj):
-    while is_empty(c, r, r[r_index]) is False:
+    while is_empty(c, r, r[r_index]) is False: # cat timp regiunea cu indexul r_index mai are culori disponibile
         c2 = copy.deepcopy(c)
-        a = random.choice(c[r.index(r[r_index])])  # ia random o culoare din lista de culori a regiunii i
-        a = ' '.join(a)  # transforma culoarea din lista in string(pentru a putea fi folosita mai departe)
-        # remove_color(r[r_index], a,r,c)
-        c[r_index].remove(a)
+
+        color = random.choice(c[r.index(r[r_index])])  # ia random o culoare din lista de culori a regiunii i
+        color = ' '.join(color)  # transforma culoarea din lista in string(pentru a putea fi folosita mai departe)
+
+        c[r_index].remove(color)
         empty_domain = False
         i = 0
         for k in range(0, len(r)):
             for b in c[r.index(r[k])]:
-                if is_consistent(r[r_index], r[k], a, region_adj, c, r):
-                    # remove_color(r[k], a,r,c)
-                    c[k].remove(a)
+                if is_consistent(r[r_index], r[k], color, region_adj, c, r):
+                    c[k].remove(color)
+            # verifica daca odata cu eliminarea culorii color regiunea k va ramane fara nicio culoare disponibila daca
+            # nu este regiunea curenta
             if k != r_index and is_empty(c, r, r[k]):
                 empty_domain = True
                 i = k
                 break
         if empty_domain and (i not in culori_asign):
-            c = copy.deepcopy(c2)  # asta ar trebui sa reseteze teoretic
+            c = copy.deepcopy(c2)  # reseteaza vectorul de culori
         else:
-            culori_asign.append(r_index)
-            return a
+            culori_asign.append(r_index) # adauga vectorul cu regiunile care au primit o culoare
+            return color
 
-
+#  verifica daca am ajuns la o solutie in care toate regiunile au primit o culoare
 def is_final(color_list):
-    print("color list in is final", color_list)
+    print("Current color list: ", color_list)
     for c in color_list:
         if len(c) != 0:
             return False
     return True
 
-
+# returneaza indexul regiunii cu cele mai putine culori de unde putem alege
 def get_index_least_constraint(colors):
     smallest = -1
     region_index = -1
@@ -93,14 +91,14 @@ def mrv_alg(regions, colors, region_adj, final):
         region_index = get_index_least_constraint(colors)
         if region_index != -1:
             color = forward_checking(regions, colors, region_index, region_adj)
-            print("culoarea aleasa", color)
+            print("Chosen color", color)
             if color is not None:
                 final[region_index] = color
             else:
                 break
     return final
 
-
+# verifica daca razultatul este unul valid
 def check_answear(final,region_adj,regions):
     for region, neighbours in region_adj.items():
         for neighbour in neighbours:
@@ -113,16 +111,18 @@ if __name__ == '__main__':
     # Exemplul1:
 
     mrv_alg(region_list, colors_list, region_adjacency, final_colors)
-    print("Solutia gasita este:", final_colors)
+    print("\nFound solution after MRV algorithm:", final_colors)
     if check_answear(final_colors, region_adjacency, region_list) is False:
-        print("Solutia gasita nu este corecta")
+        print("The solution is not valid")
     else:
-        print("Solutia este corecta")
+        print("The solution is valid")
 
-
-    # exemplul 2
+    print("\n\n")
+    # Exemplul 2
     mrv_alg(region_list2, colors_list2, region_adjacency2, final_colors2)
-    print(final_colors2)
+    print("\nFound solution after MRV algorithm:", final_colors2)
     if check_answear(final_colors2, region_adjacency2, region_list2) is False:
-        print("Solutia gasita nu este corecta")
+        print("The solution is not valid")
+    else:
+        print("The solution is valid")
 
