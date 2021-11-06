@@ -42,9 +42,16 @@ def is_final(current_state):
 def choose_random(nr_color, k):
     final_combination = list()
     i = 0
-    while i < k - 1:
+    while i < k :
         nr = random.randint(1, nr_color)
-        culoare = random.choice(bile)
+        # ver nr bile <= 4
+        while True:
+            culoare = random.choice(bile)
+            if final_combination.count(culoare) + nr <= nr_color:
+                break
+
+        if i + nr > k:
+            nr = k - i
         for j in range(0, nr):
             final_combination.append(culoare)
         i = i + nr
@@ -70,6 +77,13 @@ def choose_balls(player_B, l):
     B_input = input('Your guess: ').upper()
     player_B.bile_alese = B_input.split()
     if already_guess(player_B) is False:
+        # ver nr de bile <= 4
+        for culoare in culori_bile:
+            ap_culoare = player_B.bile_alese.count(culoare)
+            if(ap_culoare > k):
+                print("You can not enter more than " + str(k) + " balls with the same color")
+                return False
+
         if len(player_B.bile_alese) == l:
             player_B.bile_alese_corect = check_colors(player_B.bile_alese)
             print('You chose ' + str(player_B.bile_alese_corect) + ' correct balls')
@@ -84,10 +98,9 @@ def choose_balls(player_B, l):
 
 
 def play_game():
-    l = len(winning_state.bile_alese)
     for i in range(0, nr_tries):
         while True:
-            if choose_balls(player_B, l) is True:
+            if choose_balls(player_B, n) is True:
                 break
 
         if is_final(player_B) is True:
@@ -99,9 +112,10 @@ def play_game():
 
 if __name__ == '__main__':
     n = 8
-    ceva = ['A', 'B', 'C']
+    k=4
+    culori_bile = ['A', 'B', 'C']
     winning_state = State()
-    intialize(ceva, 4, 8)
+    intialize(culori_bile, k, n)
     print(winning_state.bile_alese)
     #     Interfata jucatorul B
     player_B = State()
