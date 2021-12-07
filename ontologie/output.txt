@@ -1,0 +1,20 @@
+ Computer architecture requires strong communication between computer scientists and computer engineers, since they both focus fundamentally on hardware design
+At its most fundamental level, a computer consists of a control unit, an arithmetic logic unit (ALU), a memory unit, and input/output (I/O) controllers
+ The operational speed of the CPU primarily determines the speed of the computer as a whole
+I/O controllers connect the computer to specific input devices (such as keyboards and touch screen displays) for feeding information to the memory, and output devices (such as printers and displays) for transmitting information from the memory to users
+ Additional I/O controllers connect the computer to a network via ports that provide the conduit through which data flows when the computer is connected to the Internet
+ Most importantly, computer languages include conditional instructions—essentially, rules that say, “If memory location n satisfies condition a, do instruction number x next, otherwise do instruction y
+Logic design is the area of computer science that deals with the design of electronic circuits using the fundamental principles and properties of logic (see Boolean algebra) to carry out the operations of the control unit, the ALU, the I/O controllers, and other hardware
+ These thumbnail-sized devices contain millions of transistors that implement the processing and memory units of modern computers
+Fault tolerance is the ability of a computer to continue operation when one or more of its components fails
+Computational science applies computer simulation, scientific visualization, mathematical modeling, algorithms, data structures, networking, database design, symbolic computation, and high-performance computing to help advance the goals of various disciplines
+The requirements of big-data scientific problems, including the solution of ever larger systems of equations, engage the use of large and powerful arrays of processors (called multiprocessors or supercomputers) that allow many calculations to proceed in parallel by assigning them to separate processing elements
+Graphics and visual computing is the field that deals with the display and control of images on a computer screen
+ CAD systems allow the computer to be used for designing objects ranging from automobile parts to bridges to computer chips by providing an interactive drawing tool and an engineering interface to simulation and analysis tools
+ Fine arts applications allow artists to use the computer screen as a medium to create images, cinematographic special effects, animated cartoons, and television commercials
+A challenge for computer graphics is the development of efficient algorithms that manipulate the myriad of lines, triangles, and polygons that make up a computer image
+ (For more technical details of graphics displays, see computer graphics
+ In the 1960s, user interfaces consisted of computer consoles that allowed an operator directly to type commands that could be executed immediately or at some future time
+ In the 1960s, user interfaces consisted of computer consoles that allowed an operator directly to type commands that could be executed immediately or at some future time
+ With the advent of more user-friendly personal computers in the 1980s, user interfaces became more sophisticated, so that the user could “point and click” to send a command to the operating system
+ GUIs enable users to communicate with the computer by such simple means as pointing to an icon with a mouse or touching it with a stylus or forefinger
