@@ -1,20 +1,61 @@
+ Computer architects use parallelism and various strategies for memory organization to design computing systems with very high performance
  Computer architecture requires strong communication between computer scientists and computer engineers, since they both focus fundamentally on hardware design
 At its most fundamental level, a computer consists of a control unit, an arithmetic logic unit (ALU), a memory unit, and input/output (I/O) controllers
+ The control unit fetches data and instructions from memory and uses operations of the ALU to carry out those instructions using that data
+) When an input or output instruction is encountered, the control unit transfers the data between the memory and the designated I/O controller
  The operational speed of the CPU primarily determines the speed of the computer as a whole
+ All of these components—the control unit, the ALU, the memory, and the I/O controllers—are realized with transistor circuits
+Computers host websites composed of HTML and send text messages as simple as
+ Hack into this quiz and let some technology tally your score and reveal the contents to you
+Computers also have another level of memory called a cache, a small, extremely fast (compared with the main memory, or random access memory [RAM]) unit that can be used to store information that is urgently or frequently needed
+ Current research includes cache design and algorithms that can predict what data is likely to be needed next and preload it into the cache for improved performance
 I/O controllers connect the computer to specific input devices (such as keyboards and touch screen displays) for feeding information to the memory, and output devices (such as printers and displays) for transmitting information from the memory to users
  Additional I/O controllers connect the computer to a network via ports that provide the conduit through which data flows when the computer is connected to the Internet
+ For instance, suppose that the instruction is a string of bits that is the code for LOAD 10
+ This instruction loads the contents of memory location 10 into the ALU
+ The next instruction, say ADD 15, is fetched
+ The control unit then loads the contents of memory location 15 into the ALU and adds it to the number already there
+ Finally, the instruction STORE 20 would store that sum into location 20
  Most importantly, computer languages include conditional instructions—essentially, rules that say, “If memory location n satisfies condition a, do instruction number x next, otherwise do instruction y
+Finally, programs typically contain sequences of instructions that are repeated a number of times until a predetermined condition becomes true
 Logic design is the area of computer science that deals with the design of electronic circuits using the fundamental principles and properties of logic (see Boolean algebra) to carry out the operations of the control unit, the ALU, the I/O controllers, and other hardware
+ For example, the addition circuit of the ALU has inputs corresponding to all the bits of the two numbers to be added and outputs corresponding to the bits of the sum
+ The arrangement of wires and gates that link inputs to outputs is determined by the mathematical definition of addition
+ The design of the control unit provides the circuits that interpret instructions
+ Due to the need for efficiency, logic design must also optimize the circuitry to function with maximum speed and has a minimum number of gates and circuits
+An important area related to architecture is the design of microprocessors, which are complete CPUs—control unit, ALU, and memory—on a single integrated circuit chip
  These thumbnail-sized devices contain millions of transistors that implement the processing and memory units of modern computers
+VLSI microprocessor design occurs in a number of stages, which include creating the initial functional or behavioral specification, encoding this specification into a hardware description language, and breaking down the design into modules and generating sizes and shapes for the eventual chip components
+ For example, in 1971 the first microprocessor chip (Intel Corporation’s 4004) had only 2,300 transistors, in 1993 Intel’s Pentium chip had more than 3 million transistors, and by 2000 the number of transistors on such a chip was about 50 million
+ The phenomenon of the number of transistors in an integrated circuit doubling about every two years is widely known as Moore’s law
 Fault tolerance is the ability of a computer to continue operation when one or more of its components fails
+ Such applications as aircraft control and manufacturing process control run on systems with backup processors ready to take over if the main processor fails, and the backup systems often run in parallel so the transition is smooth
+ If the systems are critical in that their failure would be potentially disastrous (as in aircraft control), incompatible outcomes collected from replicated processes running in parallel on separate machines are resolved by a voting mechanism
+ Fault tolerance is also a desirable feature in distributed systems and networks
+ For example, an advantage of a distributed database is that data replicated on different network hosts can provide a natural backup mechanism when one host fails
 Computational science applies computer simulation, scientific visualization, mathematical modeling, algorithms, data structures, networking, database design, symbolic computation, and high-performance computing to help advance the goals of various disciplines
+ These disciplines include biology, chemistry, fluid dynamics, archaeology, finance, sociology, and forensics
+The mathematical methods needed for computational science require the transformation of equations and functions from the continuous to the discrete
+ Numerical analysis is the study of such computational methods
 The requirements of big-data scientific problems, including the solution of ever larger systems of equations, engage the use of large and powerful arrays of processors (called multiprocessors or supercomputers) that allow many calculations to proceed in parallel by assigning them to separate processing elements
 Graphics and visual computing is the field that deals with the display and control of images on a computer screen
+ This field encompasses the efficient implementation of four interrelated computational tasks: rendering, modeling, animation, and visualization
+ Graphics techniques incorporate principles of linear algebra, numerical integration, computational geometry, special-purpose hardware, file formats, and graphical user interfaces (GUIs) to accomplish these complex tasks
+Applications of graphics include CAD, fine arts, medical imaging, scientific data visualization, and video games
  CAD systems allow the computer to be used for designing objects ranging from automobile parts to bridges to computer chips by providing an interactive drawing tool and an engineering interface to simulation and analysis tools
  Fine arts applications allow artists to use the computer screen as a medium to create images, cinematographic special effects, animated cartoons, and television commercials
+ Medical imaging applications involve the visualization of data obtained from technologies such as X-rays and magnetic resonance imaging (MRIs) to assist doctors in diagnosing medical conditions
+ Scientific visualization uses massive amounts of data to define simulations of scientific phenomena, such as ocean modeling, to produce pictures that provide more insight into the phenomena than would tables of numbers
+ Graphics also provide realistic visualizations for video gaming, flight simulation, and other representations of reality or fantasy
+brain cancer; magnetic resonance imaging (MRI)An image, produced by magnetic resonance imaging (MRI), of a human brain affected by cancer
+ The bright blue area indicates that the cancer spread to the occipital lobe (lower right)
 A challenge for computer graphics is the development of efficient algorithms that manipulate the myriad of lines, triangles, and polygons that make up a computer image
+ In order for realistic on-screen images to be presented, each object must be rendered as a set of planar units
+ In many applications, still pictures are inadequate, and rapid display of real-time images is required
  (For more technical details of graphics displays, see computer graphics
- In the 1960s, user interfaces consisted of computer consoles that allowed an operator directly to type commands that could be executed immediately or at some future time
+ HCI occurs at an interface that includes both software and hardware
+ User interface design impacts the life cycle of software, so it should occur early in the design process
+ Because user interfaces must accommodate a variety of user styles and capabilities, HCI research draws on several disciplines including psychology, sociology, anthropology, and engineering
  In the 1960s, user interfaces consisted of computer consoles that allowed an operator directly to type commands that could be executed immediately or at some future time
  With the advent of more user-friendly personal computers in the 1980s, user interfaces became more sophisticated, so that the user could “point and click” to send a command to the operating system
  GUIs enable users to communicate with the computer by such simple means as pointing to an icon with a mouse or touching it with a stylus or forefinger

@@ -30,15 +30,17 @@ def find_words_in_file(words):
         g = open("output.txt", 'w', encoding='utf-8')
         text = f.read().split('\n')
         for line in text:
+            r = True
             for word in words:
-                if line.find(word, 0, len(line))!=-1:
+                if r is True and line.find(word, 0, len(line)) != -1:
                     print(line)
+                    r = False
                     g.write(line)
                     g.write('\n')
 
 
-# words = ontology_parser()
-# words = modify_words(words)
+words = ontology_parser()
+words = modify_words(words)
 ceva=['1960','computer']
-find_words_in_file(ceva)
+find_words_in_file(words)
 # print(modify_words(ceva))
